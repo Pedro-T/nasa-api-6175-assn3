@@ -1,12 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import useStore from "../../store/store";
 
 
-const APODViewer = ({data}) => {
+const APODViewer = () => {
+    const {currentData} = useStore((state) => (
+        {
+            currentData: state.currentData
+        }
+    ));
     let colClass = 'col-4';
-    if (data.length === 2) {
+    if (currentData.length === 2) {
         colClass = "col-6";
-    } else if (data.length === 1) {
+    } else if (currentData.length === 1) {
         colClass = "col-10";
     }
 
@@ -14,7 +19,7 @@ const APODViewer = ({data}) => {
         <React.Fragment>
             <div className="container">
                 <div className="row justify-content-center">
-                    {data.map((entry, index) => (
+                    {currentData.map((entry, index) => (
                         <div key={index} className={colClass}>
                             <div className="card">
                                 <a href={entry.url} target="_blank">

@@ -1,28 +1,26 @@
-import React, {useState} from "react";
-import axios from "axios";
+import React from "react";
+import useStore from "../store/store"
 import APODViewer from "../components/apod/APODViewer";
 
 const CountContainer = () => {
 
-    const [currentData, setCurrentData] = useState([]);
-
-    function updateRandom() {
-        try {
-            axios.get(`/NASA_APOD?count=${document.getElementById("countField").value}`)
-                .then((response) => {
-                    setCurrentData(response.data)
-                });
-        } catch(e) {
-            console.error(e);
+    const {currentData, setCount, fetchRandom} = useStore((state) => (
+        {
+            currentData: state.currentData,
+            setCount: state.setCount,
+            fetchRandom: state.fetchRandom
         }
-    }
+    ))
 
     return (
         <React.Fragment>
             <div className="text-center">
                 <h2>Random APOD Images</h2>
-                <p>How many? <input type={"text"} id={"countField"} /></p>
-                <input type={"button"} id={"submitButton"} value="Submit" onClick={() => updateRandom()} />
+                <p>How many? <input type={"text"} id={"countField"} onChange={(e) => {
+                    console.log(e.target.value)
+                    setCount(e.target.value)
+                }}/></p>
+                <input type={"button"} id={"submitButton"} value="Submit" onClick={() => fetchRandom()} />
             </div>
             <APODViewer data={currentData}/>
         </React.Fragment>

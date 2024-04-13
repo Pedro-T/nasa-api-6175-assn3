@@ -1,28 +1,20 @@
-import Nav from "../components/navigation/Nav";
 import APODViewer from "../components/apod/APODViewer";
-import axios from "axios";
-import {useEffect, useState} from "react";
-import React from "react";
+import React, {useEffect} from "react";
+import useStore from "../store/store";
 
 
 const CurrentContainer = () => {
-    const [currentData, setCurrentData] = useState([]);
+
+    const {currentData, fetchCurrent} = useStore((state) => (
+        {
+            currentData: state.currentData,
+            fetchCurrent: state.fetchCurrent
+        }
+    ))
 
     useEffect(() => {
-        const getData = () => {
-            try {
-                const response = axios.get("/NASA_APOD")
-                    .then((response) => {
-                        setCurrentData(response.data)
-                    });
-            } catch(e) {
-                console.error(e);
-            }
-        };
-
-        getData();
-    }, []);
-
+        fetchCurrent();
+    }, [fetchCurrent]);
 
     return (
         <React.Fragment>
